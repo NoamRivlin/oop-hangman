@@ -1,49 +1,60 @@
 //Create a Hangman class that represents the game logic
 class Hangman {
   constructor(word, remainingGuesses) {
-    this.word = word.toLowerCase().split('');
+    this.word = word.toLowerCase().split("");
     this.remainingGuesses = parseInt(remainingGuesses);
   }
 
-  // guessedLetters is an array
   guessedLetters = [];
 
   // 'playing' || 'failed' || 'finished'
-  status = 'playing' || 'failed' || 'finished';
+  status = "playing" || "failed" || "finished";
   // getPuzzle() is a method that returns a string that represents the current state of the puzzle
   getPuzzle() {
     const letters = this.word
       .map((char) => {
         if (!this.guessedLetters.includes(char)) {
-          char = '*';
+          char = "*";
         }
 
         return char;
       })
-      .join('');
+      .join("");
     console.log(letters);
   }
-  // makeGuess(guess) is a method that takes a single letter as a parameter and updates the game state accordingly
+  // makeGuess() is a method that takes a single letter as a parameter and updates the game state accordingly
   makeGuess(singleLetter) {
+    if (typeof singleLetter !== "string") {
+      console.log("Guess is string only");
+      return;
+    }
     singleLetter = singleLetter.toLowerCase();
     if (this.guessedLetters.includes(singleLetter)) {
-      console.log(singleLetter + ' has already been guessed');
+      console.log(singleLetter + " has already been guessed");
       return;
     }
     this.guessedLetters.push(singleLetter);
     this.getPuzzle();
     this.remainingGuesses--;
-    console.log(this.remainingGuesses, 'remainingGuesses');
+    // TODO if a guess is correct then don't decrease remaining guesses
+    // but if it isn't then do decrease
+    console.log(this.remainingGuesses, "remainingGuesses");
+    calculateStatus();
+  }
+  // calculateStatus() is a method that updates the status property based on the current state of the game
+  calculateStatus() {
+    if (this.remainingGuesses < 0) {
+      this.status = "failed";
+    }
   }
   // getStatusMessage() is a method that returns a string that represents the current status message of the game
   getStatusMessage() {}
 }
 
-const newGame = new Hangman('asad', 5);
+const newGame = new Hangman("asad", 5);
 // newGame.guessedLetters = ['a'];
-// newGame.getPuzzle();
-newGame.makeGuess('a');
-// calculateStatus() is a method that updates the status property based on the current state of the game
+
+newGame.makeGuess("a");
 
 // Define a global variable called hangman and assign it to a new instance of Hangman with a random word and a fixed number of guesses
 // You can use any words you like, but make sure they are lowercase and have no special characters or numbers
