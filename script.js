@@ -17,6 +17,7 @@ class Hangman {
         if (!this.guessedLetters.includes(char)) {
           char = '*';
         }
+
         return char;
       })
       .join('');
