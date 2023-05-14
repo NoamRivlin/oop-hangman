@@ -11,16 +11,19 @@ class Hangman {
   status = "playing" || "failed" || "finished";
   // getPuzzle() is a method that returns a string that represents the current state of the puzzle
   getPuzzle() {
+    // Create a new array 'letters' by iterating over each character in 'this.word'
     const letters = this.word
       .map((char) => {
+        // Check if the current character is not included in the 'guessedLetters' array
         if (!this.guessedLetters.includes(char)) {
+          // If the character is not guessed, replace it with an asterisk '*'
           char = "*";
         }
-
         return char;
       })
       .join("");
     console.log(letters);
+    return letters
   }
   // makeGuess() is a method that takes a single letter as a parameter and updates the game state accordingly
   makeGuess(singleLetter) {
@@ -34,21 +37,29 @@ class Hangman {
       return;
     }
     this.guessedLetters.push(singleLetter);
-    this.getPuzzle();
-    this.remainingGuesses--;
-    // TODO if a guess is correct then don't decrease remaining guesses
-    // but if it isn't then do decrease
+    if (!this.word.includes(singleLetter)) {
+      console.log(singleLetter + ' is an incorrect guess');
+      this.remainingGuesses--;
+    } else {
+      console.log(singleLetter + ' is a correct guess');
+    }
     console.log(this.remainingGuesses, "remainingGuesses");
     calculateStatus();
   }
   // calculateStatus() is a method that updates the status property based on the current state of the game
   calculateStatus() {
-    if (this.remainingGuesses < 0) {
+    if (this.remainingGuesses < 1) {
       this.status = "failed";
+    }
+    if (this.remainingGuesses > 1) {
+      this.status = "playing";
+    }
+    if (letters === this.word) {
+      this.status = "finished";
     }
   }
   // getStatusMessage() is a method that returns a string that represents the current status message of the game
-  getStatusMessage() {}
+  getStatusMessage() { }
 }
 
 const newGame = new Hangman("asad", 5);
