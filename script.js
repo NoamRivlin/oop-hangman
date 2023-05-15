@@ -6,7 +6,6 @@ class Hangman {
   }
 
   guessedLetters = [];
-
   // 'playing' || 'failed' || 'finished'
   status = "playing" || "failed" || "finished";
   // getPuzzle() is a method that returns a string that represents the current state of the puzzle
@@ -22,7 +21,6 @@ class Hangman {
         return char;
       })
       .join("");
-    console.log(letters);
     return letters
   }
   // makeGuess() is a method that takes a single letter as a parameter and updates the game state accordingly
@@ -32,7 +30,7 @@ class Hangman {
     }
     singleLetter = singleLetter.toLowerCase();
     if (this.guessedLetters.includes(singleLetter)) {
-      console.log(singleLetter + " has already been guessed");
+      alert(singleLetter + " has already been guessed")
       return;
     }
     this.guessedLetters.push(singleLetter);
@@ -62,12 +60,34 @@ class Hangman {
   }
 }
 
-const newGame = new Hangman("asad", 5);
+const words = [
+  "apple",
+  "banana",
+  "cherry",
+  "grape",
+  "lemon",
+  "melon",
+  "peach",
+  "pear",
+  "plum",
+  "kiwi",
+  "mango",
+  "berry",
+  "carrot",
+  "olive",
+  "peanut",
+  "potato",
+  "onion",
+  "tomato",
+  "melon",
+  "pepper"
+];
+
+const chosenWord = words[Math.floor(Math.random() * words.length)]
+console.log(chosenWord);
+const newGame = new Hangman(chosenWord, 5);
 render()
-// newGame.makeGuess('a');
-// newGame.makeGuess('s');
-// newGame.makeGuess('b');
-// newGame.makeGuess('d');
+
 
 // Define a global variable called hangman and assign it to a new instance of Hangman with a random word and a fixed number of guesses
 // You can use any words you like, but make sure they are lowercase and have no special characters or numbers
@@ -84,11 +104,24 @@ function render() {
   guessedEl.textContent = newGame.guessedLetters;
 }
 
-window.addEventListener('keypress', (e) => {
-  const guess = e.key.toLowerCase()
-  newGame.makeGuess(guess)
+// window.addEventListener('keypress', (e) => {
+//   const guess = e.key.toLowerCase()
+//   newGame.makeGuess(guess)
+// })
 
-})
+// Define the event listener function
+const guessHandler = (event) => {
+  const guess = event.key.toLowerCase();
+  newGame.makeGuess(guess);
+
+  // Check if the game is finished
+  if (newGame.status === "finished" || newGame.status === "failed") {
+    window.removeEventListener("keydown", guessHandler);
+  }
+};
+
+// Attach the event listener to the window object
+window.addEventListener("keydown", guessHandler);
 
 // Call render() once at the beginning of your script to display the initial state of the game to the player
 
